@@ -10,10 +10,10 @@ letter	[A-Za-z]
 [0-9]+ 	yylval.number=atoi(yytext);	return INTEGER;
 \+		return PLUSOP;
 \-		return MINUSOP;
-\= 		return EQUALSYM;
-\^      return SQUARE;
-\*      return MULOP;
-\/      return DIVOP;
+\= 		return ASSIGNOP;
+\^      return POWEROP;
+\*      return MULTOP;
+\/      return DIVIDEOP;
 {letter}({letter}|{digit})* 	return IDENTIFIER;
 \n
 [ \t]+
