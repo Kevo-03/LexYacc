@@ -69,13 +69,13 @@ expression:
 	|
 	INTEGER 						 
     {  
-        string combined=string($1);
+        string combined=string(to_string($1));
 	    $$ = strdup(combined.c_str()); 
     }
 	|
     VARIABLE operand INTEGER
     {
-        string combined =  string($1) + string($2)  + string($3);
+        string combined =  string($1) + string($2)  + string(to_string($3));
 		$$ = strdup(combined.c_str());
     }
     |
@@ -87,42 +87,42 @@ expression:
     |
     INTEGER operand VARIABLE
     {
-        string combined =  string($1) + string($2)  + string($3);
+        string combined =  string(to_string($1)) + string($2)  + string($3);
 		$$ = strdup(combined.c_str());
     }
     |
 	INTEGER  PLUSOP INTEGER      
     { 
         int res = $1 + $3;
-        string combined=string(res);
+        string combined=string(to_string(res));
 	    $$ = strdup(combined.c_str()); 
     }
     |
 	INTEGER  MINUSOP INTEGER      
     { 
         int res = $1 - $3; 
-        string combined=string(res);
+        string combined=string(to_string(res));
 	    $$ = strdup(combined.c_str()); 
     }
     |
 	INTEGER  MULTOP INTEGER      
     { 
         int res = $1 * $3;
-        string combined=string(res);
+        string combined=string(to_string(res));
 	    $$ = strdup(combined.c_str());  
     }
     |
 	INTEGER  DIVIDEOP INTEGER      
     { 
         int res = $1 / $3;
-        string combined=string(res);
+        string combined=string(to_string(res));
 	    $$ = strdup(combined.c_str());  
     }
     |
 	INTEGER  POWEROP INTEGER      
     { 
         int res = integerPower($1,$3);
-        string combined=string(res);
+        string combined=string(to_string(res));
 	    $$ = strdup(combined.c_str());  
     }
     ;
@@ -168,5 +168,6 @@ int main(int argc, char *argv[])
     yyin=fopen(argv[1],"r");
     yyparse();
     fclose(yyin);
+    cout<<result;
     return 0;
 }

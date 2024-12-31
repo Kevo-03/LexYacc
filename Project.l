@@ -14,7 +14,7 @@ letter	[A-Za-z]
 \^      return POWEROP;
 \*      return MULTOP;
 \/      return DIVIDEOP;
-{letter}({letter}|{digit})* 	return IDENTIFIER;
+{letter}({letter}|{digit})* 	return VARIABLE;
 \n
 [ \t]+
 %%
