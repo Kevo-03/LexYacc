@@ -45,8 +45,9 @@
      MULTOP = 261,
      ASSIGNOP = 262,
      POWEROP = 263,
-     INTEGER = 264,
-     VARIABLE = 265
+     SEMICOLON = 264,
+     INTEGER = 265,
+     VARIABLE = 266
    };
 #endif
 /* Tokens.  */
@@ -56,21 +57,22 @@
 #define MULTOP 261
 #define ASSIGNOP 262
 #define POWEROP 263
-#define INTEGER 264
-#define VARIABLE 265
+#define SEMICOLON 264
+#define INTEGER 265
+#define VARIABLE 266
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 36 "ConstFolding.y"
+#line 27 "ConstFolding.y"
 {
 	int number;
 	char * str;
 }
 /* Line 1529 of yacc.c.  */
-#line 74 "y.tab.h"
+#line 76 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

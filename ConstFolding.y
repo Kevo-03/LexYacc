@@ -3,7 +3,6 @@
 	#include <iostream>
 	#include <string>
     #include <string.h>
-	#include <map>
 	using namespace std;
 	#include "y.tab.h"
 	extern FILE *yyin;
@@ -22,14 +21,6 @@
         return result;
     }
 
-	/*
-		we need to store the name of variable and  value of it.
-		So we can use two array for that. One for keeping names, one for the values.
-		But it would be a little bit complicated.
-		Instead we use map library of c++.
-		This is not about lex and yacc it is about data structure
-	*/
-	map<string,int> values;
 %}
 
 %union
@@ -38,11 +29,11 @@
 	char * str;
 }
 
-%token  MINUSOP PLUSOP DIVIDEOP MULTOP ASSIGNOP POWEROP
+%token  MINUSOP PLUSOP DIVIDEOP MULTOP ASSIGNOP POWEROP SEMICOLON
 %token<number> INTEGER
 %token<str> VARIABLE
 %type<str> expression operand
-%left PLUSOP MINUSOP
+%left PLUSOP MINUSOP SEMICOLON
 %left MULTOP DIVIDEOP POWEROP
 
 %%
@@ -54,9 +45,9 @@ program:
     ;
 
 statement:
-	VARIABLE ASSIGNOP expression
+	VARIABLE ASSIGNOP expression SEMICOLON
 	{
-			result += string($1) + "=" + string($3) + "\n";
+			result += string($1) + "=" + string($3) + ";\n";
 	}
     ;
 
@@ -69,13 +60,13 @@ expression:
 	|
 	INTEGER 						 
     {  
-        string combined=string(to_string($1));
+        string combined=to_string($1);
 	    $$ = strdup(combined.c_str()); 
     }
 	|
     VARIABLE operand INTEGER
     {
-        string combined =  string($1) + string($2)  + string(to_string($3));
+        string combined =  string($1) + string($2)  + to_string($3);
 		$$ = strdup(combined.c_str());
     }
     |
@@ -87,42 +78,42 @@ expression:
     |
     INTEGER operand VARIABLE
     {
-        string combined =  string(to_string($1)) + string($2)  + string($3);
+        string combined =  to_string($1) + string($2)  + string($3);
 		$$ = strdup(combined.c_str());
     }
     |
 	INTEGER  PLUSOP INTEGER      
     { 
         int res = $1 + $3;
-        string combined=string(to_string(res));
+        string combined=to_string(res);
 	    $$ = strdup(combined.c_str()); 
     }
     |
 	INTEGER  MINUSOP INTEGER      
     { 
         int res = $1 - $3; 
-        string combined=string(to_string(res));
+        string combined=to_string(res);
 	    $$ = strdup(combined.c_str()); 
     }
     |
 	INTEGER  MULTOP INTEGER      
     { 
         int res = $1 * $3;
-        string combined=string(to_string(res));
+        string combined=to_string(res);
 	    $$ = strdup(combined.c_str());  
     }
     |
 	INTEGER  DIVIDEOP INTEGER      
     { 
         int res = $1 / $3;
-        string combined=string(to_string(res));
+        string combined=to_string(res);
 	    $$ = strdup(combined.c_str());  
     }
     |
 	INTEGER  POWEROP INTEGER      
     { 
         int res = integerPower($1,$3);
-        string combined=string(to_string(res));
+        string combined=to_string(res);
 	    $$ = strdup(combined.c_str());  
     }
     ;
@@ -132,21 +123,25 @@ operand :
         string op = "+";
         $$ = strdup(op.c_str());
     }
+    |
     MINUSOP
     {
         string op = "-";
         $$ = strdup(op.c_str());
     }
+    |
     MULTOP
     {
         string op = "*";
         $$ = strdup(op.c_str());
     }
+    |
     DIVIDEOP
     {
         string op = "/";
         $$ = strdup(op.c_str());
     }
+    |
     POWEROP
     {
         string op = "^";
