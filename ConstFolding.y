@@ -47,7 +47,7 @@ program:
 statement:
 	VARIABLE ASSIGNOP expression SEMICOLON
 	{
-			result += string($1) + "=" + string($3) + ";\n";
+        result += string($1) + "=" + string($3) + ";\n";
 	}
     ;
 

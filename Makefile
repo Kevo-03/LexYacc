@@ -1,13 +1,36 @@
-all: lex yacc
-	g++ lex.yy.c y.tab.c -ll -o project
+# Default target
+all: project1 project2
+	./project1 input.txt | ./project2
 
-yacc: ConstFolding.y
-	yacc -d ConstFolding.y
+# Rule for project1
+project1: lex1.yy.c y1.tab.c
+	g++ lex1.yy.c y1.tab.c -ll -o project1
 
-lex: Project.l
-	lex Project.l
+# Rule for project2
+project2: lex2.yy.c y2.tab.c
+	g++ lex2.yy.c y2.tab.c -ll -o project2
 
-run: project
-	./project input.txt
+# Rule to generate lex output for project1
+lex1.yy.c: Project.l
+	lex -o lex1.yy.c Project.l
+
+# Rule to generate yacc output for project1
+y1.tab.c: ConstFolding.y
+	yacc -d -o y1.tab.c ConstFolding.y
+
+# Rule to generate lex output for project2
+lex2.yy.c: Project.l
+	lex -o lex2.yy.c Project.l
+
+# Rule to generate yacc output for project2
+y2.tab.c: Propagation.y
+	yacc -d -o y2.tab.c Propagation.y
+
+# Clean target to remove all generated files
 clean:
-	rm lex.yy.c y.tab.c  y.tab.h  project
+	rm -f lex1.yy.c y1.tab.c y1.tab.h project1
+	rm -f lex2.yy.c y2.tab.c y2.tab.h project2
+run1: project1
+	./project1 input.txt
+run2: project2
+	./project2 input.txt

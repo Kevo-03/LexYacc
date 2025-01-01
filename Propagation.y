@@ -3,6 +3,7 @@
 	#include <iostream>
 	#include <string>
     #include <string.h>
+    #include <map>
 	using namespace std;
 	#include "y.tab.h"
 	extern FILE *yyin;
@@ -10,17 +11,7 @@
 	void yyerror(string s);
 
     string result = "";
-
-    int integerPower(int base, int exponent) 
-    {
-        int result = 1;
-        for (int i = 0; i < exponent; ++i) 
-        {
-            result *= base;
-        }
-        return result;
-    }
-
+    map<string,int> values;
 %}
 
 %union
@@ -47,73 +38,108 @@ program:
 statement:
 	VARIABLE ASSIGNOP expression SEMICOLON
 	{
-			result += string($1) + "=" + string($3) + ";\n";
+        result += string($1) + "=" + string($3) + ";\n";
 	}
+    |
+    VARIABLE ASSIGNOP INTEGER SEMICOLON
+    {
+        values[string($1)] = $3;
+        result += string($1) + "=" + to_string($3) + ";\n";
+    }
+    |
+    VARIABLE ASSIGNOP VARIABLE SEMICOLON
+    {
+        if(values.find(string($3)) != values.end())
+        {
+            values[string($1)] = values[string($3)];
+            result += string($1) + "=" + to_string(values[string($1)]) + ";\n";
+        }
+        else
+        {
+            result += string($1) + "=" + string($3) + ";\n";
+        }
+    }
     ;
 
 expression:
 	VARIABLE						
     {  
-       string combined=string($1);
-	   $$ = strdup(combined.c_str()); 
-    } 
-	|
-	INTEGER 						 
-    {  
-        string combined=to_string($1);
+        string combined;
+        if(values.find(string($1)) != values.end())
+            combined = to_string(values[string($1)]);
+        else 
+            combined = string($1);
+
 	    $$ = strdup(combined.c_str()); 
-    }
+    } 
 	|
     VARIABLE operand INTEGER
     {
-        string combined =  string($1) + string($2)  + to_string($3);
+        string var;
+        if(values.find(string($1)) != values.end())
+           var = to_string(values[string($1)]);
+        else 
+           var = string($1);
+
+        string combined =  var + string($2)  + to_string($3);
 		$$ = strdup(combined.c_str());
     }
     |
     VARIABLE operand VARIABLE
     {
-        string combined =  string($1) + string($2)  + string($3);
+        string var1;
+        if(values.find(string($1)) != values.end())
+           var1 = to_string(values[string($1)]);
+        else 
+           var1 = string($1);
+        
+        string var2;
+        if(values.find(string($3)) != values.end())
+           var2 = to_string(values[string($3)]);
+        else 
+           var2 = string($3);
+        string combined =  var1 + string($2)  + var2;
 		$$ = strdup(combined.c_str());
     }
     |
     INTEGER operand VARIABLE
     {
-        string combined =  to_string($1) + string($2)  + string($3);
+        string var;
+        if(values.find(string($3)) != values.end())
+           var = to_string(values[string($3)]);
+        else 
+           var = string($3);
+        string combined =  to_string($1) + string($2)  + var;
 		$$ = strdup(combined.c_str());
     }
     |
 	INTEGER  PLUSOP INTEGER      
     { 
-        int res = $1 + $3;
-        string combined=to_string(res);
+        string combined=to_string($1) + "+" + to_string($3);
 	    $$ = strdup(combined.c_str()); 
     }
     |
 	INTEGER  MINUSOP INTEGER      
     { 
-        int res = $1 - $3; 
-        string combined=to_string(res);
+        string combined=to_string($1) + "-" + to_string($3);
 	    $$ = strdup(combined.c_str()); 
     }
     |
 	INTEGER  MULTOP INTEGER      
     { 
-        int res = $1 * $3;
-        string combined=to_string(res);
+        string combined=to_string($1) + "*" + to_string($3);
 	    $$ = strdup(combined.c_str());  
     }
     |
 	INTEGER  DIVIDEOP INTEGER      
     { 
-        int res = $1 / $3;
-        string combined=to_string(res);
+        string combined=to_string($1) + "/" + to_string($3);
 	    $$ = strdup(combined.c_str());  
     }
     |
 	INTEGER  POWEROP INTEGER      
     { 
-        int res = integerPower($1,$3);
-        string combined=to_string(res);
+        string combined=to_string($1) + "^" + to_string($3);
 	    $$ = strdup(combined.c_str());  
     }
     ;
