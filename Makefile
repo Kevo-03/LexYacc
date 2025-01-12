@@ -38,10 +38,12 @@ clean:
 	rm -f lex3.yy.c y3.tab.c y3.tab.h project3
 
 run1: project1
-	./project1 input.txt
+	./project1 input1.txt
+	./project1 input2.txt
 
 run2: project2
-	./project2 input.txt
+	./project2 input1.txt
+	./project2 input2.txt
 	
 run3: project3
-	./project3 input.txt
+	./project3 input3.txt

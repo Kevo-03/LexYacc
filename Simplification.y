@@ -161,7 +161,6 @@ int yywrap(){
 }
 int main(int argc, char *argv[])
 {
-    /* Call the lexer, then quit. */
     yyin=fopen(argv[1],"r");
     yyparse();
     fclose(yyin);
