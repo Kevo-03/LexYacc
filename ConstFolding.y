@@ -4,7 +4,7 @@
 	#include <string>
     #include <string.h>
 	using namespace std;
-	#include "y.tab.h"
+	#include "y1.tab.h"
 	extern FILE *yyin;
 	extern int yylex();
 	void yyerror(string s);

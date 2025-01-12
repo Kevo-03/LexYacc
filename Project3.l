@@ -3,7 +3,7 @@ letter	[A-Za-z]
 %{
 #include <stdio.h>
 #include <string.h>
-#include "y.tab.h"
+#include "y3.tab.h"
 
 %}
 %%
@@ -19,4 +19,3 @@ letter	[A-Za-z]
 \n
 [ \t]+
 %%
-

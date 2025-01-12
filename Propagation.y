@@ -5,7 +5,7 @@
     #include <string.h>
     #include <map>
 	using namespace std;
-	#include "y.tab.h"
+	#include "y2.tab.h"
 	extern FILE *yyin;
 	extern int yylex();
 	void yyerror(string s);

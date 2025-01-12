@@ -14,20 +14,20 @@ project2: lex2.yy.c y2.tab.c
 project3: lex3.yy.c y3.tab.c
 	g++ lex3.yy.c y3.tab.c -ll -o project3
 
-lex1.yy.c: Project.l
-	lex -o lex1.yy.c Project.l
+lex1.yy.c: Project1.l
+	lex -o lex1.yy.c Project1.l
 
 y1.tab.c: ConstFolding.y
 	yacc -d -o y1.tab.c ConstFolding.y
 
-lex2.yy.c: Project.l
-	lex -o lex2.yy.c Project.l
+lex2.yy.c: Project2.l
+	lex -o lex2.yy.c Project2.l
 
 y2.tab.c: Propagation.y
 	yacc -d -o y2.tab.c Propagation.y
 
-lex3.yy.c: Project.l
-	lex -o lex3.yy.c Project.l
+lex3.yy.c: Project3.l
+	lex -o lex3.yy.c Project3.l
 
 y3.tab.c: Simplification.y
 	yacc -d -o y3.tab.c Simplification.y
